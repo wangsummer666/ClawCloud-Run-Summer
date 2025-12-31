@@ -31,15 +31,17 @@ class Telegram:
     
     def send(self, msg):
         if not self.ok:
+            print("❌ TG 配置未就绪，请检查变量名")
             return
         try:
-            requests.post(
+            r = requests.post(
                 f"https://api.telegram.org/bot{self.token}/sendMessage",
                 data={"chat_id": self.chat_id, "text": msg, "parse_mode": "HTML"},
                 timeout=30
             )
-        except:
-            pass
+            print(f"TG 响应状态码: {r.status_code}, 内容: {r.text}") # 添加这行看报错
+        except Exception as e:
+            print(f"TG 发送异常: {e}") # 看到到底是因为网络还是其他原因
     
     def photo(self, path, caption=""):
         if not self.ok or not os.path.exists(path):
